@@ -14,7 +14,6 @@ def ui_main():
         def index_document(self, doc_id, text, field):
             # Tokenize text into terms
             terms = text.split()
-            print(terms)
             # Update index with terms and corresponding document IDs
             for term in terms:
                 if term not in self.index:
@@ -25,9 +24,7 @@ def ui_main():
 
         def search(self, query, field):
             terms = query.split()
-            print("terms1", terms)
             results = set(self.index.get(terms[0], {}).keys())
-            print("results", results)
             for term in terms[1:]:
                 results = results.intersection(self.index.get(term, {}).keys())
 
@@ -61,7 +58,6 @@ def ui_main():
     # Indexing publications dynamically based on field
     def index_based_on_field(field):
         index.index = {}
-        print("index")
         for doc_id, row in df.iterrows():
             publication_data = row[field]
             index.index_document(doc_id, publication_data, field)
@@ -76,7 +72,7 @@ def ui_main():
 
     # Load and resize the logo
     logo_image = Image.open("coventry_university_logo.png")
-    logo_image = logo_image.resize((100, 100), Image.ANTIALIAS)
+    logo_image = logo_image.resize((100, 100), Image.LANCZOS)
     logo_photo = ImageTk.PhotoImage(logo_image)
 
     # Create a frame to hold the search input and results
@@ -128,9 +124,7 @@ def ui_main():
     # Function to handle search button click event
     def search():
         query = query_entry.get()
-        print("query")
         field = selected_field.get()
-        print("field")
         # Call the search method of the index object
         results = index.search(query, field)
         result_tree.delete(*result_tree.get_children())
